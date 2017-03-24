@@ -1,28 +1,43 @@
 <?php
 /*
 vide = 0
-O    = 1
-X    = 2
+X    = 1
+O    = 2
 */
 class Morpion{
+    private $id;
     private $morpionArray;
 
-    function __construct() {
+    function __construct($id) {
+        $tmpMorpion = SuperMorpionDao::GetMorpionById($id);
+
+        $this->id = $tmpMorpion['id_morpion'];
         $this->morpionArray = array(
-            "A1" => 0,
-            "A2" => 0,
-            "A3" => 0,
-            "B1" => 0,
-            "B2" => 0,
-            "B3" => 0,
-            "C1" => 0,
-            "C2" => 0,
-            "C3" => 0,
+            "A1" => $tmpMorpion['A1'],
+            "A2" => $tmpMorpion['A2'],
+            "A3" => $tmpMorpion['A3'],
+            "B1" => $tmpMorpion['B1'],
+            "B2" => $tmpMorpion['B2'],
+            "B3" => $tmpMorpion['B3'],
+            "C1" => $tmpMorpion['C1'],
+            "C2" => $tmpMorpion['C2'],
+            "C3" => $tmpMorpion['C3'],
         );
     }
+
+    public function GetId()
+    {
+        return $this->id;
+    }
+
     public function GetMorpionArray()
     {
         return $this->morpionArray;
+    }
+
+    public function SetMorpionArray($array)
+    {
+        $this->morpionArray = $array;
     }
 
     public function Play($position, $intXO){
@@ -36,8 +51,8 @@ class Morpion{
 
 /*
 si personne ne/n'a gagne/é retourne 0
-si O gagne retourne 1
-si X gagne retourne 2
+si X gagne retourne 1
+si O gagne retourne 2
 */
     public function TestIfWin(){
         $currentPosVal = 0;
@@ -76,5 +91,12 @@ si X gagne retourne 2
             }
         }
         return 0;
+    }
+
+    static public function CreateNewMorpion()
+    {
+        SuperMorpionDao::InsertMorpion(0, 0, 0, 0, 0, 0, 0, 0, 0);
+        $tmpMorpion = new Morpion(SmPdo::GetPdo()->lastInsertId());
+        return $tmpMorpion;
     }
 }
