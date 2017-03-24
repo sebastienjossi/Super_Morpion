@@ -35,7 +35,7 @@ class Morpion{
     }
 
 /*
-si personne ne/n'a gagne/é retourne 0
+si personne nn'a gagné retourne 0
 si O gagne retourne 1
 si X gagne retourne 2
 */
