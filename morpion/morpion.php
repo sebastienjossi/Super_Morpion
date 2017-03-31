@@ -1,4 +1,5 @@
 <?php
+require_once 'include.inc.php';
 /*
 vide = 0
 X    = 1
@@ -21,7 +22,7 @@ class Morpion{
             "B3" => $tmpMorpion['B3'],
             "C1" => $tmpMorpion['C1'],
             "C2" => $tmpMorpion['C2'],
-            "C3" => $tmpMorpion['C3'],
+            "C3" => $tmpMorpion['C3']
         );
     }
 

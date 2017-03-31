@@ -1,6 +1,5 @@
 <?php
-
-require_once 'config.inc.php';
+require_once 'include.inc.php';
 
 class SmPdo{
     private static $dbPdo = NULL;
@@ -74,6 +73,15 @@ class SuperMorpionDao{
         return $sql->fetch(PDO::FETCH_ASSOC);
     }
 
+    static function GetSupermorpionById($id){
+        $req = "SELECT id_supermorpion, id_A1, id_A2, id_A3, id_B1, id_B2, id_B3, id_C1, id_C2, id_C3 FROM supermorpion WHERE id_supermorpion = :id";
+        $sql = SmPdo::GetPdo()->prepare($req);
+        $sql->bindParam(':id', $id);
+        $sql->execute();
+
+        return $sql->fetch(PDO::FETCH_ASSOC);
+    }
+
     static function InsertMorpion($A1, $A2, $A3, $B1, $B2, $B3, $C1, $C2, $C3){
         $req = "INSERT INTO supermorpion.morpion (id_morpion, A1, A2, A3, B1, B2, B3, C1, C2, C3) VALUES (NULL, :A1, :A2, :A3, :B1, :B2, :B3, :C1, :C2, :C3);";
         $sql = SmPdo::GetPdo()->prepare($req); 
@@ -86,6 +94,21 @@ class SuperMorpionDao{
         $sql->bindParam(':C1', $C1);   
         $sql->bindParam(':C2', $C2);   
         $sql->bindParam(':C3', $C3);   
+        $sql->execute();
+    }
+
+    static function InsertSupermorpion($idA1, $idA2, $idA3, $idB1, $idB2, $idB3, $idC1, $idC2, $idC3){
+        $req = "INSERT INTO supermorpion.supermorpion (id_supermorpion, id_A1, id_A2, id_A3, id_B1, id_B2, id_B3, id_C1, id_C2, id_C3) VALUES (NULL, :A1, :A2, :A3, :B1, :B2, :B3, :C1, :C2, :C3);";
+        $sql = SmPdo::GetPdo()->prepare($req); 
+        $sql->bindParam(':A1', $idA1);   
+        $sql->bindParam(':A2', $idA2);   
+        $sql->bindParam(':A3', $idA3);   
+        $sql->bindParam(':B1', $idB1);   
+        $sql->bindParam(':B2', $idB2);   
+        $sql->bindParam(':B3', $idB3);   
+        $sql->bindParam(':C1', $idC1);   
+        $sql->bindParam(':C2', $idC2);   
+        $sql->bindParam(':C3', $idC3);   
         $sql->execute();
     }
 

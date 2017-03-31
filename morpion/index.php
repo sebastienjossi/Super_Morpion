@@ -1,12 +1,15 @@
 <?php
-    include_once("superMController.php");
-    include_once("morpion.php");
-    include_once("game.php");
-    include_once("user.php");
-    include_once("dao.php");
+    require_once 'include.inc.php';
+
 
     $game = new Game(48);
+    $sm_test = new SuperMorpion(3);
 
+    $sm_test->Play("A1", "A2", 2);
+
+    echo "<pre>";
+    print_r($sm_test);
+    echo "</pre>";
 
 
 

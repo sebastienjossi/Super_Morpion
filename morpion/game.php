@@ -1,8 +1,6 @@
 <?php
-include_once("superMController.php");
-include_once("user.php");
-include_once("morpion.php");
-include_once("dao.php");
+require_once 'include.inc.php';
+
 
 class Game{
     private $id;
@@ -10,7 +8,7 @@ class Game{
     private $p2;
     private $next_p;
     private $winner;
-    private $morpion;
+    private $supermorpion;
 
     public function GetId()
     {
@@ -37,9 +35,9 @@ class Game{
         return $this->winner;
     }
     
-    public function GetMorpion()
+    public function GetSupermorpion()
     {
-        return $this->morpion;
+        return $this->supermorpion;
     }
 
     function __construct($id) {
@@ -50,10 +48,10 @@ class Game{
         $this->p2 = new User($tmpGame['id_player_2']);
         $this->next_p = new User($tmpGame['id_next_turn_player']);
         $this->winner = new User($tmpGame['id_winner']);
-        $this->morpion = new Morpion($tmpGame['id_supermorpion']);
+        $this->supermorpion = new Supermorpion($tmpGame['id_supermorpion']);
     }
 
-    function Play($position){
+    function Play($position){ //sync avec la bdd
         if($this->p1 == $this->next_p){
             $this->morpion->Play($position, 1);
             $this->next_p = $this->p2;

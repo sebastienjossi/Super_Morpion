@@ -1,6 +1,5 @@
 <?php
-include_once("superMController.php");    
-include_once("dao.php");
+require_once 'include.inc.php';
 
 class User{
     private $id;
