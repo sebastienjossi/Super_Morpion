@@ -59,19 +59,19 @@ si O gagne retourne 2
         $currentPosVal = 0;
         if($this->morpionArray["A2"] != 0){
             $currentPosVal = $this->morpionArray["A2"];
-            if($this->morpionArray["A1"] == $currentPosVal && $this->morpionArray["A3"] == $currentPosVal){
+            if(($this->morpionArray["A1"] == $currentPosVal) && ($this->morpionArray["A3"] == $currentPosVal)){
                 return $currentPosVal;
             }
         }
         if($this->morpionArray["C2"] != 0){
             $currentPosVal = $this->morpionArray["C2"];
-            if($this->morpionArray["C1"] == $currentPosVal && $this->morpionArray["C3"] == $currentPosVal){
+            if(($this->morpionArray["C1"] == $currentPosVal) && ($this->morpionArray["C3"] == $currentPosVal)){
                 return $currentPosVal;
             }
         }
         if($this->morpionArray["B1"] != 0){
             $currentPosVal = $this->morpionArray["B1"];
-            if($this->morpionArray["A1"] == $currentPosVal && $this->morpionArray["C1"] == $currentPosVal){
+            if(($this->morpionArray["A1"] == $currentPosVal) && ($this->morpionArray["C1"] == $currentPosVal)){
                 return $currentPosVal;
             }
         }
