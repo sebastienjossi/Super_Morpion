@@ -4,7 +4,7 @@ require_once 'include.inc.php';
 class Supermorpion{
     private $id;
     private $supermorpionArray;
-    private $nextmorpion;
+    private $posnextmorpion;
 
     function __construct($id) {
         $tmpSupermorpion = SuperMorpionDao::GetSupermorpionById($id);
@@ -21,8 +21,8 @@ class Supermorpion{
             "C2" => new Morpion($tmpSupermorpion['id_C2']),
             "C3" => new Morpion($tmpSupermorpion['id_C3'])
         );
-        if (isset($tmpSupermorpion['id_next_morpion'])) {
-            $this->nextmorpion = new Morpion($tmpSupermorpion['id_next_morpion']);
+        if (isset($tmpSupermorpion['pos_next_morpion'])) {
+            $this->nextmorpion = $tmpSupermorpion['pos_next_morpion'];
         }
     }
 
@@ -41,13 +41,57 @@ class Supermorpion{
         $this->supermorpionArray = $array;
     }
 
-    public function GetNextMorpion()
+    public function GetPosNextMorpion()
     {
-        return $this->nextmorpion;
+        return $this->posnextmorpion;
+    }
+
+    public function SetPosNextMorpion($pos)
+    {
+        $this->posnextmorpion = $pos;
     }
 
     public function Play($positionSM, $positionM, $intXO){
         $this->supermorpionArray[$positionSM]->Play($positionM, $intXO);
+    }
+
+    public function TestIfWin(){
+        $currentPosVal = 0;
+        if($this->supermorpionArray["A2"]->TestIfWin() != 0){
+            $currentPosVal = $this->supermorpionArray["A2"]->TestIfWin();
+            if($this->supermorpionArray["A1"]->TestIfWin() == $currentPosVal && $this->supermorpionArray["A3"]->TestIfWin() == $currentPosVal){
+                return $currentPosVal;
+            }
+        }
+        if($this->supermorpionArray["C2"]->TestIfWin() != 0){
+            $currentPosVal = $this->supermorpionArray["C2"]->TestIfWin();
+            if($this->supermorpionArray["C1"]->TestIfWin() == $currentPosVal && $this->supermorpionArray["C3"]->TestIfWin() == $currentPosVal){
+                return $currentPosVal;
+            }
+        }
+        if($this->supermorpionArray["B1"]->TestIfWin() != 0){
+            $currentPosVal = $this->supermorpionArray["B1"]->TestIfWin();
+            if($this->supermorpionArray["A1"]->TestIfWin() == $currentPosVal && $this->supermorpionArray["C1"]->TestIfWin() == $currentPosVal){
+                return $currentPosVal;
+            }
+        }
+        if($this->supermorpionArray["B3"]->TestIfWin() != 0){
+            $currentPosVal = $this->supermorpionArray["B3"]->TestIfWin();
+            if($this->supermorpionArray["A3"]->TestIfWin() == $currentPosVal && $this->supermorpionArray["C3"]->TestIfWin() == $currentPosVal){
+                return $currentPosVal;
+            }
+        }
+
+        if($this->supermorpionArray["B2"]->TestIfWin() != 0){
+            $currentPosVal = $this->supermorpionArray["B2"]->TestIfWin();
+            if(($this->supermorpionArray["A2"]->TestIfWin() == $currentPosVal && $this->supermorpionArray["C2"]->TestIfWin() == $currentPosVal)||
+               ($this->supermorpionArray["B1"]->TestIfWin() == $currentPosVal && $this->supermorpionArray["B3"]->TestIfWin() == $currentPosVal)||
+               ($this->supermorpionArray["A1"]->TestIfWin() == $currentPosVal && $this->supermorpionArray["C3"]->TestIfWin() == $currentPosVal)||
+               ($this->supermorpionArray["C1"]->TestIfWin() == $currentPosVal && $this->supermorpionArray["A3"]->TestIfWin() == $currentPosVal)){
+                return $currentPosVal;
+            }
+        }
+        return 0;
     }
 
     static public function CreateNewSupermorpion()

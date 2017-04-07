@@ -51,20 +51,26 @@ class Game{
         $this->supermorpion = new Supermorpion($tmpGame['id_supermorpion']);
     }
 
-    function Play($position){ //sync avec la bdd
+    function Play($positionM){ //sync avec la bdd
         if($this->p1 == $this->next_p){
-            $this->morpion->Play($position, 1);
+            $this->supermorpion->Play($this->supermorpion->GetPosNextMorpion(),$positionM, 1);
             $this->next_p = $this->p2;
         } else {
-            $this->morpion->Play($position, 2);
+            $this->supermorpion->Play($this->supermorpion->GetPosNextMorpion(),$positionM, 2);
             $this->next_p = $this->p1;
         }
+        $this->supermorpion->SetPosNextMorpion($positionM);
+    }
 
-        if($this->morpion->TestIfWin()==1){
-            echo "gg, 1 <br>";
-        } else if($this->morpion->TestIfWin()==2){
-            echo "gg, 2 <br>";
+    function PlayNoPos($positionSM, $positionM){
+        if($this->p1 == $this->next_p){
+            $this->supermorpion->Play($positionSM, $positionM, 1);
+            $this->next_p = $this->p2;
+        } else {
+            $this->supermorpion->Play($positionSM, $positionM, 2);
+            $this->next_p = $this->p1;
         }
+        $this->supermorpion->SetPosNextMorpion($positionM);
     }
 
     static public function CreateNewGame($player1Param, $player2Param)
