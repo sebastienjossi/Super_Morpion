@@ -46,25 +46,6 @@
     echo "<br><br><br><br>";
 
     echo $game->GetSupermorpion()->TestIfWin();
-
-
-
-
-
     echo "<pre>";
     print_r($game);
     echo "</pre>";
-
-
-
-
-
-    //$p1 = new User(1);
-    //$p2 = new User(2);
-    //$morpion = new Morpion(1);
-    //$game = new Game(48);
-
-    //$game->GetMorpion()->Play("A2",1);
-
-    
-

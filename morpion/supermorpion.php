@@ -2,10 +2,11 @@
 require_once 'include.inc.php';
 
 class Supermorpion{
-    private $id;
-    private $supermorpionArray;
-    private $posnextmorpion;
+    private $id; //L'identifiant du super moprion
+    private $supermorpionArray; //Un tableau contenant dans chaque case un morpion (3x3)
+    private $posnextmorpion; //Le morpion contenu dans le supermorpion dans lequel le prochain joueur à jouer doit jouer
 
+    //Construis le supermorpion en fonction des valeurs pour chaque morpion contenues dans la base de données
     function __construct($id) {
         $tmpSupermorpion = SuperMorpionDao::GetSupermorpionById($id);
 
@@ -51,10 +52,12 @@ class Supermorpion{
         $this->posnextmorpion = $pos;
     }
 
+    //Joue (dans un morpion) à une position du supermorpion puis (dans une case) à une position du morpion avec le signe donné (XO)
     public function Play($positionSM, $positionM, $intXO){
         $this->supermorpionArray[$positionSM]->Play($positionM, $intXO);
     }
 
+    //Vérifie si le morpion est gagné
     public function TestIfWin(){
         $currentPosVal = 0;
         if($this->supermorpionArray["A2"]->TestIfWin() != 0){
@@ -91,9 +94,10 @@ class Supermorpion{
                 return $currentPosVal;
             }
         }
-        return 0;
+        return 0; //Si tout les tests sont parcourus, le morpion n'est pas gagné
     }
 
+    //Crée un nouveau super morpion
     static public function CreateNewSupermorpion()
     {
         SuperMorpionDao::InsertSupermorpion(Morpion::CreateNewMorpion()->GetId(),

@@ -3,12 +3,12 @@ require_once 'include.inc.php';
 
 
 class Game{
-    private $id;
-    private $p1;
-    private $p2;
-    private $next_p;
-    private $winner;
-    private $supermorpion;
+    private $id; //identifiant de la partie
+    private $p1; //Player1 : un joueur
+    private $p2; //Player2 : un deuxième joueur
+    private $next_p; //Le prochain joueur qui doit jouer (C'est son tour)
+    private $winner; //Le gagnant de la partie
+    private $supermorpion; //Le supermorpion
 
     public function GetId()
     {
@@ -51,6 +51,7 @@ class Game{
         $this->supermorpion = new Supermorpion($tmpGame['id_supermorpion']);
     }
 
+    //Permet de jouer à une position du morpion (met le bon signe en fonction du joueur et determine le prochain joueur)
     function Play($positionM){ //sync avec la bdd
         if($this->p1 == $this->next_p){
             $this->supermorpion->Play($this->supermorpion->GetPosNextMorpion(),$positionM, 1);
@@ -62,6 +63,7 @@ class Game{
         $this->supermorpion->SetPosNextMorpion($positionM);
     }
 
+    //Permet de joueur à une position d'un morpion du super Supermorpion
     function PlayNoPos($positionSM, $positionM){
         if($this->p1 == $this->next_p){
             $this->supermorpion->Play($positionSM, $positionM, 1);
@@ -73,6 +75,7 @@ class Game{
         $this->supermorpion->SetPosNextMorpion($positionM);
     }
 
+    //Crée une nouvelle partie avec deux joueurs
     static public function CreateNewGame($player1Param, $player2Param)
     {
         $tmpMorpion = CreateNewMorpion();
