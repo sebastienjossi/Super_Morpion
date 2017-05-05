@@ -20,6 +20,7 @@ class SmPdo{
 }
 
 class SuperMorpionDao{
+    //Récupère la partie via son identifiant
     static function GetGameById($id){
         $req = "SELECT id_game, id_player_1, id_player_2, id_next_turn_player, id_winner, id_supermorpion FROM game WHERE id_game = :id";
         $sql = SmPdo::GetPdo()->prepare($req); 
@@ -29,6 +30,7 @@ class SuperMorpionDao{
         return $sql->fetch(PDO::FETCH_ASSOC);
     }
 
+    //Ajoute une partie liée à 2 joueurs et un morpion
     static function InsertGame($id_p1, $id_p2, $id_morpion){
         $req = "INSERT INTO game (id_player_1, id_player_2, id_supermorpion) VALUES (:idP1, :idP2, :idMorpion)";
         $sql = SmPdo::GetPdo()->prepare($req); 
@@ -38,6 +40,7 @@ class SuperMorpionDao{
         $sql->execute();
     }
 
+    //Met à jour la partie via le nom du champ à modifier, et la nouvelle valeur
     static function UpdateGame($fieldName, $value){
         $req = "UPDATE game SET `:fieldname` = `:value`";
         $sql = SmPdo::GetPdo()->prepare($req); 
@@ -46,6 +49,7 @@ class SuperMorpionDao{
         $sql->execute();
     }
 
+    //Récupère un utilisateur via son identifiant
     static function GetUserById($id){
         $req = "SELECT id_user, nickname, email, password FROM user WHERE id_user = :id";
         $sql = SmPdo::GetPdo()->prepare($req); 
@@ -55,15 +59,16 @@ class SuperMorpionDao{
         return $sql->fetch(PDO::FETCH_ASSOC);
     }
 
+    //Récupère tout les morpions
     static function GetAllMorpions(){
         $req = "SELECT id_morpion, A1, A2, A3, B1, B2, B3, C1, C2, C3 FROM morpion";
         $sql = SmPdo::GetPdo()->prepare($req); 
-        //$sql->bindParam(':id', $idUser);   
         $sql->execute();
 
         return $sql->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    //Récupère un morpion via son identifiant
     static function GetMorpionById($id){
         $req = "SELECT id_morpion, A1, A2, A3, B1, B2, B3, C1, C2, C3 FROM morpion WHERE id_morpion = :id";
         $sql = SmPdo::GetPdo()->prepare($req); 
@@ -73,6 +78,7 @@ class SuperMorpionDao{
         return $sql->fetch(PDO::FETCH_ASSOC);
     }
 
+    //récupère un supermorpion via son identifiant
     static function GetSupermorpionById($id){
         $req = "SELECT id_supermorpion, id_A1, id_A2, id_A3, id_B1, id_B2, id_B3, id_C1, id_C2, id_C3 FROM supermorpion WHERE id_supermorpion = :id";
         $sql = SmPdo::GetPdo()->prepare($req);
@@ -82,6 +88,7 @@ class SuperMorpionDao{
         return $sql->fetch(PDO::FETCH_ASSOC);
     }
 
+    //Insère un morpion avec l'etat de chacune de ses cases
     static function InsertMorpion($A1, $A2, $A3, $B1, $B2, $B3, $C1, $C2, $C3){
         $req = "INSERT INTO supermorpion.morpion (id_morpion, A1, A2, A3, B1, B2, B3, C1, C2, C3) VALUES (NULL, :A1, :A2, :A3, :B1, :B2, :B3, :C1, :C2, :C3);";
         $sql = SmPdo::GetPdo()->prepare($req); 
@@ -97,6 +104,7 @@ class SuperMorpionDao{
         $sql->execute();
     }
 
+    //Insère un supermorpion avec l'etat de chaque morpion qu'il contient
     static function InsertSupermorpion($idA1, $idA2, $idA3, $idB1, $idB2, $idB3, $idC1, $idC2, $idC3){
         $req = "INSERT INTO supermorpion.supermorpion (id_supermorpion, id_A1, id_A2, id_A3, id_B1, id_B2, id_B3, id_C1, id_C2, id_C3) VALUES (NULL, :A1, :A2, :A3, :B1, :B2, :B3, :C1, :C2, :C3);";
         $sql = SmPdo::GetPdo()->prepare($req); 
@@ -112,6 +120,7 @@ class SuperMorpionDao{
         $sql->execute();
     }
 
+    //Modifie le champ donnéeavec la valeur donnée du morpion via son identifiant
     static function UpdateMorpion($nomChamp, $updatedValue, $id){
         $req = "UPDATE morpion SET :nomChamp = ':updatedValue' WHERE id_morpion = :id";
         $sql = SmPdo::GetPdo()->prepare($req); 

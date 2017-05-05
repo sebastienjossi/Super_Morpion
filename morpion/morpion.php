@@ -6,9 +6,10 @@ X    = 1
 O    = 2
 */
 class Morpion{
-    private $id;
-    private $morpionArray;
+    private $id; //L'identifiant du morpion'
+    private $morpionArray; //Un tableau qui correspond au morpion (3 x 3)
 
+    //Construit un morpion tel qu'enregistré dans la base de données
     function __construct($id) {
         $tmpMorpion = SuperMorpionDao::GetMorpionById($id);
 
@@ -55,23 +56,26 @@ si personne ne/n'a gagne/é retourne 0
 si X gagne retourne 1
 si O gagne retourne 2
 */
+    //Vérifie si la partie a été gagnée (si 3 signes sont allignés en diagonale, ligne ou colonne)
     public function TestIfWin(){
         $currentPosVal = 0;
+        //Vérifie la position du millieu de la ligne ou de la colonne, si elle est vide, pas besoin d'aller plus loin'
         if($this->morpionArray["A2"] != 0){
             $currentPosVal = $this->morpionArray["A2"];
-            if($this->morpionArray["A1"] == $currentPosVal && $this->morpionArray["A3"] == $currentPosVal){
+            //Si la position du millieu n'est pas vide, vérifie les cases adjacentes'
+            if(($this->morpionArray["A1"] == $currentPosVal) && ($this->morpionArray["A3"] == $currentPosVal)){
                 return $currentPosVal;
             }
         }
         if($this->morpionArray["C2"] != 0){
             $currentPosVal = $this->morpionArray["C2"];
-            if($this->morpionArray["C1"] == $currentPosVal && $this->morpionArray["C3"] == $currentPosVal){
+            if(($this->morpionArray["C1"] == $currentPosVal) && ($this->morpionArray["C3"] == $currentPosVal)){
                 return $currentPosVal;
             }
         }
         if($this->morpionArray["B1"] != 0){
             $currentPosVal = $this->morpionArray["B1"];
-            if($this->morpionArray["A1"] == $currentPosVal && $this->morpionArray["C1"] == $currentPosVal){
+            if(($this->morpionArray["A1"] == $currentPosVal) && ($this->morpionArray["C1"] == $currentPosVal)){
                 return $currentPosVal;
             }
         }
@@ -81,7 +85,7 @@ si O gagne retourne 2
                 return $currentPosVal;
             }
         }
-
+        //Pour la position du centre vérifie les diagonales également
         if($this->morpionArray["B2"] != 0){
             $currentPosVal = $this->morpionArray["B2"];
             if(($this->morpionArray["A2"] == $currentPosVal && $this->morpionArray["C2"] == $currentPosVal)||
@@ -91,9 +95,10 @@ si O gagne retourne 2
                 return $currentPosVal;
             }
         }
-        return 0;
+        return 0; //si personne n'a gagné, tout les tests sont parcourus sans retourner de valeur
     }
 
+    //Crée un nouveau morpion vide
     static public function CreateNewMorpion()
     {
         SuperMorpionDao::InsertMorpion(0, 0, 0, 0, 0, 0, 0, 0, 0);

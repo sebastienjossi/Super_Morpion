@@ -2,10 +2,10 @@
 require_once 'include.inc.php';
 
 class User{
-    private $id;
-    private $nickname;
-    private $email;
-    private $password;
+    private $id; //Un identifiant
+    private $nickname; //Un pseudonyme
+    private $email; //Un email
+    private $password; //Un mot de passe
 
     public function GetId()
     {
@@ -27,6 +27,7 @@ class User{
         return $this->password;
     }
 
+    //Crée un utilisateur correspondant aux données de la base
     function __construct($id) {
         $tmpUser = SuperMorpionDao::GetUserById($id);
 
