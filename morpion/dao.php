@@ -49,11 +49,31 @@ class SuperMorpionDao{
         $sql->execute();
     }
 
+    //Ajoute un utilisateur
+    static function InsertUser($nickname, $email, $password){
+        $req = "INSERT INTO user (nickname, email, password) VALUES (:nickname, :email, :password)";
+        $sql = SmPdo::GetPdo()->prepare($req); 
+        $sql->bindParam(':nickname', $nickname);   
+        $sql->bindParam(':email', $email);   
+        $sql->bindParam(':password', $password);   
+        $sql->execute();
+    }
+
     //Récupère un utilisateur via son identifiant
     static function GetUserById($id){
         $req = "SELECT id_user, nickname, email, password FROM user WHERE id_user = :id";
         $sql = SmPdo::GetPdo()->prepare($req); 
         $sql->bindParam(':id', $id);   
+        $sql->execute();
+
+        return $sql->fetch(PDO::FETCH_ASSOC);
+    }
+
+    //Récupère un utilisateur via son pseudo
+    static function GetUserByNickname($nickname){
+        $req = "SELECT id_user, nickname, email, password FROM user WHERE nickname = :nickname";
+        $sql = SmPdo::GetPdo()->prepare($req); 
+        $sql->bindParam(':nickname', $nickname);   
         $sql->execute();
 
         return $sql->fetch(PDO::FETCH_ASSOC);
