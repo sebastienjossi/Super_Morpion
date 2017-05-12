@@ -49,6 +49,9 @@ if (isset($_GET['action'])) {
         <?php
             if(isset($_SESSION['id_connected']) && $_SESSION['id_connected'] != null){
                 echo 'Bonjour';
+
+                echo '<br><a href="lobby.php">Lobby</a>';
+
                 echo '<br><a href="index.php?action=deco">Deconnection</a>';
             } else {
                 DisplayLogin();

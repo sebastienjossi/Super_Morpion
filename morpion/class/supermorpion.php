@@ -22,9 +22,7 @@ class Supermorpion{
             "C2" => new Morpion($tmpSupermorpion['id_C2']),
             "C3" => new Morpion($tmpSupermorpion['id_C3'])
         );
-        if (isset($tmpSupermorpion['pos_next_morpion'])) {
-            $this->nextmorpion = $tmpSupermorpion['pos_next_morpion'];
-        }
+        $this->posnextmorpion = $tmpSupermorpion['pos_next_morpion'];
     }
 
     public function GetId()

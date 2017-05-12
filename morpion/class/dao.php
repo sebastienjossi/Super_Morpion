@@ -30,6 +30,20 @@ class SuperMorpionDao{
         return $sql->fetch(PDO::FETCH_ASSOC);
     }
 
+    //Récupère la partie via les identifiants des 2 joueurs
+    static function GetGameByPlayersIds($id_p1, $id_p2){
+        $req = "SELECT id_game, id_player_1, id_player_2, id_next_turn_player, id_winner, id_supermorpion 
+                FROM game 
+                WHERE (id_player_1 = :id_p1 AND id_player_2 = :id_p2)
+                OR (id_player_2 = :id_p1 AND id_player_1 = :id_p2)";
+        $sql = SmPdo::GetPdo()->prepare($req); 
+        $sql->bindParam(':id_p1', $id_p1);   
+        $sql->bindParam(':id_p2', $id_p2);  
+        $sql->execute();
+
+        return $sql->fetch(PDO::FETCH_ASSOC);
+    }
+
     //Ajoute une partie liée à 2 joueurs et un morpion
     static function InsertGame($id_p1, $id_p2, $id_morpion){
         $req = "INSERT INTO game (id_player_1, id_player_2, id_supermorpion) VALUES (:idP1, :idP2, :idMorpion)";
@@ -69,6 +83,49 @@ class SuperMorpionDao{
         return $sql->fetch(PDO::FETCH_ASSOC);
     }
 
+    //Récupère tous les utilisateurs
+    static function GetAllUsers(){
+        $req = "SELECT id_user, nickname, email, password FROM user";
+        $sql = SmPdo::GetPdo()->prepare($req); 
+        $sql->execute();
+
+        return $sql->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    //Récupère tous les joueur contre qui on joue
+    static function GetUsersVersus($id)
+    {
+        $req = "SELECT user2.id_user, user2.nickname, user2.email, user2.password 
+                FROM user 
+                JOIN game ON game.id_player_1 = user.id_user
+                JOIN user AS user2 ON user2.id_user = game.id_player_2
+                WHERE user.id_user = :id";
+        $sql = SmPdo::GetPdo()->prepare($req); 
+        $sql->bindParam(':id', $id);   
+        $sql->execute();
+
+        $tmp = $sql->fetchAll(PDO::FETCH_ASSOC);
+        
+        $req = "SELECT user2.id_user, user2.nickname, user2.email, user2.password 
+                FROM user 
+                JOIN game ON game.id_player_2 = user.id_user
+                JOIN user AS user2 ON user2.id_user = game.id_player_1
+                WHERE user.id_user = :id";
+        $sql = SmPdo::GetPdo()->prepare($req); 
+        $sql->bindParam(':id', $id);   
+        $sql->execute();
+
+        $cpt = 0;
+        $tmp_count = count($tmp);
+        foreach($sql->fetchAll(PDO::FETCH_ASSOC) as $user){
+            $tmp[$tmp_count + $cpt] = $user;
+
+            $cpt++;
+        }
+
+        return $tmp;
+    }
+
     //Récupère un utilisateur via son pseudo
     static function GetUserByNickname($nickname){
         $req = "SELECT id_user, nickname, email, password FROM user WHERE nickname = :nickname";
@@ -100,7 +157,7 @@ class SuperMorpionDao{
 
     //récupère un supermorpion via son identifiant
     static function GetSupermorpionById($id){
-        $req = "SELECT id_supermorpion, id_A1, id_A2, id_A3, id_B1, id_B2, id_B3, id_C1, id_C2, id_C3 FROM supermorpion WHERE id_supermorpion = :id";
+        $req = "SELECT id_supermorpion, id_A1, id_A2, id_A3, id_B1, id_B2, id_B3, id_C1, id_C2, id_C3, pos_next_morpion FROM supermorpion WHERE id_supermorpion = :id";
         $sql = SmPdo::GetPdo()->prepare($req);
         $sql->bindParam(':id', $id);
         $sql->execute();

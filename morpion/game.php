@@ -1,86 +1,90 @@
+<!doctype html>
 <?php
-require_once 'include.inc.php';
+session_start();
+include_once('include.inc.php');
+?>
+<html lang="fr">
+    <head>
+        <meta charset="utf-8">
+        <title>Titre de la page</title>
+        <link rel="stylesheet" href="style.css">
+        <script src="script.js"></script>
+    </head>
+    <body>
+        <?php
+        $game = Game::constructWithPlayersIds($_SESSION['id_connected'], $_GET['idversus']);
 
-
-class Game{
-    private $id; //identifiant de la partie
-    private $p1; //Player1 : un joueur
-    private $p2; //Player2 : un deuxième joueur
-    private $next_p; //Le prochain joueur qui doit jouer (C'est son tour)
-    private $winner; //Le gagnant de la partie
-    private $supermorpion; //Le supermorpion
-
-    public function GetId()
-    {
-        return $this->id;
-    }
-
-    public function GetPlayer1()
-    {
-        return $this->p1;
-    }
-
-    public function GetPlayer2()
-    {
-        return $this->p2;
-    }
-
-    public function GetNextPlayer()
-    {
-        return $this->next_p;
-    }
-
-    public function GetWinner()
-    {
-        return $this->winner;
-    }
-    
-    public function GetSupermorpion()
-    {
-        return $this->supermorpion;
-    }
-
-    function __construct($id) {
-        $tmpGame = SuperMorpionDao::GetGameById($id);
-
-        $this->id = $tmpGame['id_game'];
-        $this->p1 = new User($tmpGame['id_player_1']);
-        $this->p2 = new User($tmpGame['id_player_2']);
-        $this->next_p = new User($tmpGame['id_next_turn_player']);
-        $this->winner = new User($tmpGame['id_winner']);
-        $this->supermorpion = new Supermorpion($tmpGame['id_supermorpion']);
-    }
-
-    //Permet de jouer à une position du morpion (met le bon signe en fonction du joueur et determine le prochain joueur)
-    function Play($positionM){ //sync avec la bdd
-        if($this->p1 == $this->next_p){
-            $this->supermorpion->Play($this->supermorpion->GetPosNextMorpion(),$positionM, 1);
-            $this->next_p = $this->p2;
+        if($game->GetNextPlayer()->GetId() == $_SESSION['id_connected']){
+            echo 'A vous de jouer';
         } else {
-            $this->supermorpion->Play($this->supermorpion->GetPosNextMorpion(),$positionM, 2);
-            $this->next_p = $this->p1;
+            echo 'C\'est a votre adversaire de jouer';
         }
-        $this->supermorpion->SetPosNextMorpion($positionM);
-    }
 
-    //Permet de joueur à une position d'un morpion du super Supermorpion
-    function PlayNoPos($positionSM, $positionM){
-        if($this->p1 == $this->next_p){
-            $this->supermorpion->Play($positionSM, $positionM, 1);
-            $this->next_p = $this->p2;
-        } else {
-            $this->supermorpion->Play($positionSM, $positionM, 2);
-            $this->next_p = $this->p1;
+        SuperMorpionHtmlTable($game);
+
+        echo '<pre>';
+        print_r($game);
+        echo '</pre>';
+        ?>
+    </body>
+</html>
+
+<?php
+function SuperMorpionHtmlTable($game){
+        $arrayImg = array(
+            0 => 'vide.png',
+            1 => 'croix.png',
+            2 => 'cercle.png');
+        $arrayImgJouer = array(
+            0 => 'videAJouer.png',
+            1 => 'croix.png',
+            2 => 'cercle.png');
+
+
+        $display = '';
+        $display .= '<table>';
+        for ($i=1; $i <= 3; $i++) { 
+            $display .= '<tr>';
+            for ($j=1; $j <= 3; $j++) { 
+                $display .= '<td>';
+                $display .= '<table border=1>';
+                for ($h=1; $h <= 3; $h++) {
+                    $display .= '<tr>'; 
+                    for ($k=1; $k <= 3; $k++) { 
+                        $tmpPosSupermorpion = ($i == 1 ? "A" . $j : ($i == 2 ? "B" . $j : "C" . $j));
+                        $tmpPosMorpion = ($h == 1 ? "A" . $k : ($h == 2 ? "B" . $k : "C" . $k));
+
+                        if($game->GetNextPlayer()->GetId() == $_SESSION['id_connected']){
+
+
+
+                            
+                            if($game->GetSupermorpion()->GetPosNextMorpion() != null){
+                                if($game->GetSupermorpion()->GetPosNextMorpion() == $tmpPosSupermorpion){
+                                    $display .= '<td><img src="img/' . $arrayImgJouer[$game->GetSupermorpion()->GetSupermorpionArray()[$tmpPosSupermorpion]->GetMorpionArray()[$tmpPosMorpion]] . '" alt="" height="30" width="30"></td>';
+                                } else {
+                                    $display .= '<td><img src="img/' . $arrayImg[$game->GetSupermorpion()->GetSupermorpionArray()[$tmpPosSupermorpion]->GetMorpionArray()[$tmpPosMorpion]] . '" alt="" height="30" width="30"></td>';
+                                }
+                            } else {
+                                $display .= '<td><img src="img/' . $arrayImgJouer[$game->GetSupermorpion()->GetSupermorpionArray()[$tmpPosSupermorpion]->GetMorpionArray()[$tmpPosMorpion]] . '" alt="" height="30" width="30"></td>';
+                            }
+
+
+
+
+                        } else {
+                            $display .= '<td><img src="img/' . $arrayImg[$game->GetSupermorpion()->GetSupermorpionArray()[$tmpPosSupermorpion]->GetMorpionArray()[$tmpPosMorpion]] . '" alt="" height="30" width="30"></td>';
+                        }
+                        
+                    }
+                    $display .= '</tr>';
+                }
+                $display .= '</table>';
+                $display .= '</td>';
+            }
+            $display .= '</tr>';
         }
-        $this->supermorpion->SetPosNextMorpion($positionM);
+        $display .= '</table>';
+        echo $display;
     }
-
-    //Crée une nouvelle partie avec deux joueurs
-    static public function CreateNewGame($player1Param, $player2Param)
-    {
-        $tmpMorpion = CreateNewMorpion();
-        SuperMorpionDao::InsertGame($player1Param->GetId(), $player2Param->GetId(), $tmpMorpion->GetId());
-        $tmpGame = new Game(SmPdo::GetPdo()->lastInsertId());
-        return $tmpGame;
-    }
-}
+?>
