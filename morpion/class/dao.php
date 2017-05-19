@@ -55,11 +55,11 @@ class SuperMorpionDao{
     }
 
     //Met à jour la partie via le nom du champ à modifier, et la nouvelle valeur
-    static function UpdateGame($fieldName, $value){
-        $req = "UPDATE game SET `:fieldname` = `:value`";
+    static function UpdateGame($fieldName, $value, $id){
+        $req = "UPDATE game SET `$fieldName` = '$value' WHERE id_game = :id";
         $sql = SmPdo::GetPdo()->prepare($req); 
-        $sql->bindParam(':fieldName', $fieldName);   
-        $sql->bindParam(':value', $value);    
+        //$sql->bindParam(':value', $value);    
+        $sql->bindParam(':id', $id);    
         $sql->execute();
     }
 
@@ -181,6 +181,16 @@ class SuperMorpionDao{
         $sql->execute();
     }
 
+    //modifie une des position dans un morpion
+    static function UpdatePosMorpion($pos, $value, $id)
+    {
+        $req = "UPDATE morpion SET $pos=:value WHERE id_morpion=:id";
+        $sql = SmPdo::GetPdo()->prepare($req); 
+        $sql->bindParam(':value', $value);   
+        $sql->bindParam(':id', $id);   
+        $sql->execute();
+    }
+
     //Insère un supermorpion avec l'etat de chaque morpion qu'il contient
     static function InsertSupermorpion($idA1, $idA2, $idA3, $idB1, $idB2, $idB3, $idC1, $idC2, $idC3){
         $req = "INSERT INTO supermorpion.supermorpion (id_supermorpion, id_A1, id_A2, id_A3, id_B1, id_B2, id_B3, id_C1, id_C2, id_C3) VALUES (NULL, :A1, :A2, :A3, :B1, :B2, :B3, :C1, :C2, :C3);";
@@ -196,6 +206,15 @@ class SuperMorpionDao{
         $sql->bindParam(':C3', $idC3);   
         $sql->execute();
     }
+
+    static function UpdateSupermorpionPosNextMorpion($posNextMorpion, $id){
+        $req = "UPDATE supermorpion SET pos_next_morpion=:posNextMorpion WHERE id_supermorpion=:id;";
+        $sql = SmPdo::GetPdo()->prepare($req); 
+        $sql->bindParam(':posNextMorpion', $posNextMorpion);   
+        $sql->bindParam(':id', $id);    
+        $sql->execute();
+    }
+
 
     //Modifie le champ donnéeavec la valeur donnée du morpion via son identifiant
     static function UpdateMorpion($nomChamp, $updatedValue, $id){

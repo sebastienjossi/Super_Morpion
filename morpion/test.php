@@ -34,7 +34,11 @@
     }
 
 
-    SuperMorpionHtmlTable($game);
+    //SuperMorpionDao::UpdateGame('id_next_turn_player', 3, 48);
+
+
+
+    /*SuperMorpionHtmlTable($game);
     echo "<br><br><br><br>";
 
     $game->PlayNoPos("B2","C3");
@@ -57,7 +61,7 @@
 
     echo "<pre>";
     print_r($game);
-    echo "</pre>";
+    echo "</pre>";*/
 
 
 

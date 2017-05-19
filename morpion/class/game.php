@@ -30,6 +30,11 @@ class Game{
         return $this->next_p;
     }
 
+    public function SetNextPlayer($p)
+    {
+        $this->next_p = $p;
+    }
+
     public function GetWinner()
     {
         return $this->winner;
@@ -59,12 +64,14 @@ class Game{
     function Play($positionM){ //sync avec la bdd
         if($this->p1 == $this->next_p){
             $this->supermorpion->Play($this->supermorpion->GetPosNextMorpion(),$positionM, 1);
-            $this->next_p = $this->p2;
+            $this->next_p = $this->p2;            
+            SuperMorpionDao::UpdateGame('id_next_turn_player', $this->GetPlayer2()->GetId(), $this->GetId());
         } else {
             $this->supermorpion->Play($this->supermorpion->GetPosNextMorpion(),$positionM, 2);
             $this->next_p = $this->p1;
+            SuperMorpionDao::UpdateGame('id_next_turn_player', $this->GetPlayer1()->GetId(), $this->GetId());
+            echo 'oui';
         }
-        $this->supermorpion->SetPosNextMorpion($positionM);
     }
 
     //Permet de joueur à une position d'un morpion du super Supermorpion
@@ -76,7 +83,13 @@ class Game{
             $this->supermorpion->Play($positionSM, $positionM, 2);
             $this->next_p = $this->p1;
         }
+
         $this->supermorpion->SetPosNextMorpion($positionM);
+        if(!$this->GetSupermorpion()->GetSupermorpionArray()[$positionM]->TestIfFinished()){
+            SuperMorpionDao::UpdateSupermorpionPosNextMorpion($positionM, $this->GetSupermorpion()->GetId());
+        } else {
+            SuperMorpionDao::UpdateSupermorpionPosNextMorpion('NULL', $this->GetSupermorpion()->GetId());
+        }
     }
 
     //Crée une nouvelle partie avec deux joueurs

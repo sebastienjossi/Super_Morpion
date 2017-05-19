@@ -53,6 +53,14 @@ class Supermorpion{
     //Joue (dans un morpion) à une position du supermorpion puis (dans une case) à une position du morpion avec le signe donné (XO)
     public function Play($positionSM, $positionM, $intXO){
         $this->supermorpionArray[$positionSM]->Play($positionM, $intXO);
+        
+        if(!$this->GetSupermorpionArray()[$positionM]->TestIfFinished()){
+            $this->SetPosNextMorpion($positionM);
+            SuperMorpionDao::UpdateSupermorpionPosNextMorpion($positionM, $this->GetId());
+        } else {
+            $this->SetPosNextMorpion(null);
+            SuperMorpionDao::UpdateSupermorpionPosNextMorpion(null, $this->GetId());
+        }
     }
 
     //Vérifie si le morpion est gagné

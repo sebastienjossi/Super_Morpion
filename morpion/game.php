@@ -53,6 +53,7 @@ function SuperMorpionHtmlTable($game){
                     for ($k=1; $k <= 3; $k++) { 
                         $tmpPosSupermorpion = ($i == 1 ? "A" . $j : ($i == 2 ? "B" . $j : "C" . $j));
                         $tmpPosMorpion = ($h == 1 ? "A" . $k : ($h == 2 ? "B" . $k : "C" . $k));
+                        $tmpValuePos = $game->GetSupermorpion()->GetSupermorpionArray()[$tmpPosSupermorpion]->GetMorpionArray()[$tmpPosMorpion];
 
                         if($game->GetNextPlayer()->GetId() == $_SESSION['id_connected']){
 
@@ -61,19 +62,27 @@ function SuperMorpionHtmlTable($game){
                             
                             if($game->GetSupermorpion()->GetPosNextMorpion() != null){
                                 if($game->GetSupermorpion()->GetPosNextMorpion() == $tmpPosSupermorpion){
-                                    $display .= '<td><img src="img/' . $arrayImgJouer[$game->GetSupermorpion()->GetSupermorpionArray()[$tmpPosSupermorpion]->GetMorpionArray()[$tmpPosMorpion]] . '" alt="" height="30" width="30"></td>';
+                                    if ($tmpValuePos == 0) {
+                                        $display .= '<td><a href="played.php?idgame=' . $game->GetId() . '&pos=' . $tmpPosSupermorpion . '-' . $tmpPosMorpion . '"><img src="img/' . $arrayImgJouer[$tmpValuePos] . '" alt="" height="30" width="30"></a></td>';
+                                    } else {
+                                        $display .= '<td><img src="img/' . $arrayImgJouer[$tmpValuePos] . '" alt="" height="30" width="30"></td>';
+                                    }
                                 } else {
-                                    $display .= '<td><img src="img/' . $arrayImg[$game->GetSupermorpion()->GetSupermorpionArray()[$tmpPosSupermorpion]->GetMorpionArray()[$tmpPosMorpion]] . '" alt="" height="30" width="30"></td>';
+                                    $display .= '<td><img src="img/' . $arrayImg[$tmpValuePos] . '" alt="" height="30" width="30"></td>';
                                 }
                             } else {
-                                $display .= '<td><img src="img/' . $arrayImgJouer[$game->GetSupermorpion()->GetSupermorpionArray()[$tmpPosSupermorpion]->GetMorpionArray()[$tmpPosMorpion]] . '" alt="" height="30" width="30"></td>';
+                                if ($tmpValuePos == 0) {
+                                    $display .= '<td><a href="played.php?idgame=' . $game->GetId() . '&pos=' . $tmpPosSupermorpion . '-' . $tmpPosMorpion . '"><img src="img/' . $arrayImgJouer[$tmpValuePos] . '" alt="" height="30" width="30"></a></td>';
+                                } else {
+                                    $display .= '<td><img src="img/' . $arrayImgJouer[$tmpValuePos] . '" alt="" height="30" width="30"></td>';
+                                }
                             }
 
 
 
 
                         } else {
-                            $display .= '<td><img src="img/' . $arrayImg[$game->GetSupermorpion()->GetSupermorpionArray()[$tmpPosSupermorpion]->GetMorpionArray()[$tmpPosMorpion]] . '" alt="" height="30" width="30"></td>';
+                            $display .= '<td><img src="img/' . $arrayImg[$tmpValuePos] . '" alt="" height="30" width="30"></td>';
                         }
                         
                     }

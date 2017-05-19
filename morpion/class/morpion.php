@@ -45,6 +45,10 @@ class Morpion{
     public function Play($position, $intXO){
         if($this->morpionArray[$position] == 0){
             $this->morpionArray[$position] = $intXO;
+
+            echo "position:$position/intXO:$intXO/GetId:" . $this->GetId();
+
+            SuperMorpionDao::UpdatePosMorpion($position, $intXO, $this->GetId());
             return true;
         } else {
             return false;
@@ -98,9 +102,21 @@ si O gagne retourne 2
         return 0; //si personne n'a gagné, tout les tests sont parcourus sans retourner de valeur
     }
 
+    public function TestIfFinished(){
+        if($this->TestIfWin() == 0){
+            foreach ($this->GetMorpionArray() as $pos) {
+                if($pos == 0){
+                    return false;
+                }
+            } 
+            return true;
+        } else {
+            return true;
+        }
+    }
+
     //Crée un nouveau morpion vide
-    static public function CreateNewMorpion()
-    {
+    static public function CreateNewMorpion(){
         SuperMorpionDao::InsertMorpion(0, 0, 0, 0, 0, 0, 0, 0, 0);
         $tmpMorpion = new Morpion(SmPdo::GetPdo()->lastInsertId());
         return $tmpMorpion;
