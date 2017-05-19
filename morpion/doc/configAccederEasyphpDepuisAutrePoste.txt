@@ -1,0 +1,22 @@
+Pour pouvoir tester plus facilement, c'est mieux d'avoir 2 comptes cnnecté en meme temps pour pouvoir jouer l'un contre l'autre et pour
+ça il faut que l'autre compte puisse accéder a votre easyphp depuis son poste:
+
+	1. acccéder au fichier de configuration apache:
+		- lancer easyphp
+		- clique droit sur l'icone easyphp dans la barre des tache (a droite vers l'heure)
+		- configuration 
+		- apache
+	
+	2. récupérer votre ip
+		- lancer cmd (Windows + R > "cmd" > enter)
+		- taper "ipconfig"
+		- récupérer l'adresse IPv4 de la carte ethernet utilisée (10.134.xxx.xxx)
+
+	3. changer l'ip dans le fichier de config apache
+		- dans le fichier de config, chercher "Listen 127.0.0.1:80"
+		- remplacé "127.0.0.1" par l'ip récuperée plus tôt
+	
+	4. accèder depuis un autre poste
+		- maintenant n'importe qui peut acceder a votre easyphp en tapant votre ip dans son navigateur
+			-> il faut donc faire très attention, n'importe qui peut vous drop votre database par exemple 
+		
